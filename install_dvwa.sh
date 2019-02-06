@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Created on Sep 29, 2014
-# Author: Hojung Yun
-# Email: hojung_yun@yahoo.co.kr
-
 # This script will install the followings:
 # Apache Webserver
 # Mysql Server
@@ -11,14 +7,6 @@
 # Damn Vulnerable Web App (DVWA)
 
 IP_ADDR=$(/sbin/ip -o -4 addr list enp0s3 | awk '{print $4}' | cut -d/ -f1)
-
-# echo "Disabling SELinux"
-# echo 0 > /selinux/enforce
-# sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
-
-# echo "Disabling Firewall"
-# service iptables stop
-# chkconfig iptables off
 
 echo "Installing wget, netcat and unzip"
 apt-get install wget unzip -y
@@ -33,12 +21,12 @@ rm /etc/apache2/sites-enabled/000-default*
 echo "<VirtualHost *:80>
     ServerAdmin webmaster@localhost
     DocumentRoot /var/www/html/dvwa
-</VirutalHost>" >> /etc/apache2/sites-available/dvwa.conf
+</VirtualHost>" >> /etc/apache2/sites-available/dvwa.conf
 
 
 echo "Installing mysql and mysql-server"
-apt-get install mariadb mariadb-server -y
-systemctl start mariadb
+apt-get install mysql mysql-server -y
+systemctl start mysql
 mysqladmin -u root
 CREATE DATABASE dvwa;
 CREATE USER 'dvwauser'@'localhost' IDENTIFIED BY 'password';
@@ -50,21 +38,20 @@ exit;
 echo "Installing Damn Vulnerable Web App (DVWA)"
 cd /var/www/html
 wget https://codeload.github.com/ethicalhack3r/DVWA/zip/master
-unzip DVWA-master.zip
+unzip master.zip
 rm -f DVWA-master.zip
 mkdir /var/www/html/dvwa
 mv DVWA-master/* /var/www/html/dvwa/
 rm -rf DVWA-master/
 cd /var/www/html/dvwa/config
-cp config.inc.php config.inc.php.BKP
-chmod 000 config.inc.php.BKP
+mv config.inc.php.dist config.inc.php
 sed -i "s/''/'dvwaPASSWORD'/" config.inc.php
 ln -s /etc/apache2/sites-available/dvwa.conf /etc/apache2/sites-enabled/
 systemctl restart apache2
 
-echo "edit the PHP configuration file for apache servers and set the value of allow_url_include to ON"
+echo "edit the PHP configuration file for apache servers and set the value of allow_url_include and allow_url_fopen to ON"
 
-nano /etc/php/7.2/apache2/php.ini
+nano /etc/php/7.0/apache2/php.ini
 
 echo "Installation is done"
 echo "Open your web browser and go to http://$IP_ADDR/dvwa/setup.php to continue to configure"

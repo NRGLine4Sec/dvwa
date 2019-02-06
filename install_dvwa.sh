@@ -12,19 +12,19 @@
 
 IP_ADDR=$(/sbin/ip -o -4 addr list enp0s3 | awk '{print $4}' | cut -d/ -f1)
 
-echo "Disabling SELinux"
-echo 0 > /selinux/enforce
-sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
+# echo "Disabling SELinux"
+# echo 0 > /selinux/enforce
+# sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
 
-echo "Disabling Firewall"
-service iptables stop
-chkconfig iptables off
+# echo "Disabling Firewall"
+# service iptables stop
+# chkconfig iptables off
 
 echo "Installing wget, netcat and unzip"
-apt-get install wget nc unzip -y
+apt-get install wget unzip -y
 
 echo "Installing PHP"
-apt-get install php7.0 php7.0-mysql php-pear php7.2-gd -y
+apt-get install php7.0 php7.0-mysql php-pear php7.0-gd -y
 
 echo "Installing Apache httpd Server"
 apt-get install appache2 -y
@@ -75,3 +75,4 @@ echo "Password: password"
 echo 
 echo "For more info:"
 echo "http://www.computersecuritystudent.com/SECURITY_TOOLS/DVWA/DVWAv107/lesson1/index.html"
+

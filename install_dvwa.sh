@@ -1,0 +1,77 @@
+#!/bin/bash
+
+# Created on Sep 29, 2014
+# Author: Hojung Yun
+# Email: hojung_yun@yahoo.co.kr
+
+# This script will install the followings:
+# Apache Webserver
+# Mysql Server
+# PHP
+# Damn Vulnerable Web App (DVWA)
+
+IP_ADDR=$(/sbin/ip -o -4 addr list enp0s3 | awk '{print $4}' | cut -d/ -f1)
+
+echo "Disabling SELinux"
+echo 0 > /selinux/enforce
+sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
+
+echo "Disabling Firewall"
+service iptables stop
+chkconfig iptables off
+
+echo "Installing wget, netcat and unzip"
+apt-get install wget nc unzip -y
+
+echo "Installing PHP"
+apt-get install php7.0 php7.0-mysql php-pear php7.2-gd -y
+
+echo "Installing Apache httpd Server"
+apt-get install appache2 -y
+/etc/init.d/appache2 start
+rm /etc/apache2/sites-enabled/000-default*
+echo "<VirtualHost *:80>
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/html/dvwa
+</VirutalHost>" >> /etc/apache2/sites-available/dvwa.conf
+
+
+echo "Installing mysql and mysql-server"
+apt-get install mariadb mariadb-server -y
+systemctl start mariadb
+mysqladmin -u root
+CREATE DATABASE dvwa;
+CREATE USER 'dvwauser'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL ON dvwa.* TO 'dvwauser'@'localhost';
+flush privileges;
+exit;
+
+
+echo "Installing Damn Vulnerable Web App (DVWA)"
+cd /var/www/html
+wget https://codeload.github.com/ethicalhack3r/DVWA/zip/master
+unzip DVWA-master.zip
+rm -f DVWA-master.zip
+mkdir /var/www/html/dvwa
+mv DVWA-master/* /var/www/html/dvwa/
+rm -rf DVWA-master/
+cd /var/www/html/dvwa/config
+cp config.inc.php config.inc.php.BKP
+chmod 000 config.inc.php.BKP
+sed -i "s/''/'dvwaPASSWORD'/" config.inc.php
+ln -s /etc/apache2/sites-available/dvwa.conf /etc/apache2/sites-enabled/
+systemctl restart apache2
+
+echo "edit the PHP configuration file for apache servers and set the value of allow_url_include to ON"
+
+nano /etc/php/7.2/apache2/php.ini
+
+echo "Installation is done"
+echo "Open your web browser and go to http://$IP_ADDR/dvwa/setup.php to continue to configure"
+echo "1. Click on Create / Reset Database"
+echo "2. Login to DVWA with the user credentials below"
+echo "Username: admin"
+echo "Password: password"
+echo 
+echo "For more info:"
+echo "http://www.computersecuritystudent.com/SECURITY_TOOLS/DVWA/DVWAv107/lesson1/index.html"

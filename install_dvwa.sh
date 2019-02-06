@@ -27,12 +27,11 @@ echo "<VirtualHost *:80>
 echo "Installing mysql and mysql-server"
 apt-get install mysql mysql-server -y
 systemctl start mysql
-mysqladmin -u root
-CREATE DATABASE dvwa;
-CREATE USER 'dvwauser'@'localhost' IDENTIFIED BY 'password';
-GRANT ALL ON dvwa.* TO 'dvwauser'@'localhost';
-flush privileges;
-exit;
+
+CREATE DATABASE dvwa; | mysql -u root -p$rootpass
+CREATE USER 'dvwauser'@'localhost' IDENTIFIED BY 'password'; | mysql -u root -p$rootpass
+GRANT ALL ON dvwa.* TO 'dvwauser'@'localhost'; | mysql -u root -p$rootpass
+flush privileges; | mysql -u root -p$rootpass
 
 
 echo "Installing Damn Vulnerable Web App (DVWA)"

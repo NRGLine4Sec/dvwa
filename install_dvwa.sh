@@ -28,12 +28,21 @@ echo "Installing mysql-client and mysql-server"
 apt-get install mysql-client mysql-server -y
 systemctl start mysql
 
-read -p "Enter your MySQL root password: " rootpass
-CREATE DATABASE dvwa; | mysql -u root -p$rootpass
-CREATE USER 'dvwauser'@'localhost' IDENTIFIED BY 'password'; | mysql -u root -p$rootpass
-GRANT ALL ON dvwa.* TO 'dvwauser'@'localhost'; | mysql -u root -p$rootpass
-flush privileges; | mysql -u root -p$rootpass
 
+#CREATE DATABASE dvwa; | mysql -u root -p$rootpass
+#CREATE USER 'dvwauser'@'localhost' IDENTIFIED BY 'password'; | mysql -u root -p$rootpass
+#GRANT ALL ON dvwa.* TO 'dvwauser'@'localhost'; | mysql -u root -p$rootpass
+#flush privileges; | mysql -u root -p$rootpass
+
+read -p "Enter your MySQL root password: " rootpass
+read -p "Database name: " dbname
+read -p "Database username: " dbuser
+read -p "Enter a password for user $dbuser: " userpass
+echo "CREATE DATABASE $dbname;" | mysql -u root -p$rootpass
+echo "CREATE USER '$dbuser'@'localhost' IDENTIFIED BY '$userpass';" | mysql -u root -p$rootpass
+echo "GRANT ALL PRIVILEGES ON $dbname.* TO '$dbuser'@'localhost';" | mysql -u root -p$rootpass
+echo "FLUSH PRIVILEGES;" | mysql -u root -p$rootpass
+echo "New MySQL database is successfully created"
 
 echo "Installing Damn Vulnerable Web App (DVWA)"
 cd /var/www/html

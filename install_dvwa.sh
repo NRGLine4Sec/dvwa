@@ -25,7 +25,7 @@ echo "<VirtualHost *:80>
 
 
 echo "Installing mysql-client and mysql-server"
-apt-get install mysql mysql-server -y
+apt-get install mysql-client mysql-server -y
 systemctl start mysql
 
 CREATE DATABASE dvwa; | mysql -u root -p$rootpass

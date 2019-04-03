@@ -56,11 +56,11 @@ cd /var/www/html/dvwa/config
 mv config.inc.php.dist config.inc.php
 sed -i "s/''/'dvwaPASSWORD'/" config.inc.php
 ln -s /etc/apache2/sites-available/dvwa.conf /etc/apache2/sites-enabled/
-systemctl restart apache2
 
 echo "edit the PHP configuration file for apache servers and set the value of allow_url_include and allow_url_fopen to ON"
-sed -i 's/"allow_url_include = Off"/"allow_url_include = On"/' /etc/php/7.0/apache2/php.ini
-sed -i 's/"allow_url_fopen = Off"/"allow_url_fopen = On"/' /etc/php/7.0/apache2/php.ini
+sed -i 's/allow_url_include = Off/"allow_url_include = On/' /etc/php/7.0/apache2/php.ini
+sed -i 's/allow_url_fopen = Off/"allow_url_fopen = On/' /etc/php/7.0/apache2/php.ini
+systemctl restart apache2
 
 echo "Installation is done"
 echo "Open your web browser and go to http://$IP_ADDR/dvwa/setup.php to continue to configure"

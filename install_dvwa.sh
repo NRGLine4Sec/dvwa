@@ -48,9 +48,9 @@ mv DVWA-master/* /var/www/html/dvwa/
 rm -rf DVWA-master/
 cd /var/www/html/dvwa/config
 mv config.inc.php.dist config.inc.php
+sed -i "s/'p@ssw0rd'/'$userpass'/" config.inc.php
+sed -i "s/'root'/'$dbuser'/" config.inc.php
 sed -i "s/''/'dvwaPASSWORD'/" config.inc.php
-sed -i "s/$_DVWA[ 'db_password' ] = 'p@ssw0rd';/$_DVWA[ 'db_password' ] = '$userpass';/' /var/www/html/dvwa/config/config.inc.php"
-sed -i "s/$_DVWA[ 'db_user' ]     = 'root';/$_DVWA[ 'db_user' ]     = '$dbuser';/' /var/www/html/dvwa/config/config.inc.php"
 ln -s /etc/apache2/sites-available/dvwa.conf /etc/apache2/sites-enabled/
 
 echo "edit the PHP configuration file for apache servers and set the value of allow_url_include and allow_url_fopen to ON"

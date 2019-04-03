@@ -15,8 +15,8 @@ echo "Installing PHP"
 apt-get install php7.0 php7.0-mysql php-pear php7.0-gd -y
 
 echo "Installing Apache httpd Server"
-apt-get install appache2 -y
-/etc/init.d/appache2 start
+apt-get install apache2 -y
+/etc/init.d/apache2 start
 rm /etc/apache2/sites-enabled/000-default*
 echo "<VirtualHost *:80>
     ServerAdmin webmaster@localhost
@@ -24,7 +24,7 @@ echo "<VirtualHost *:80>
 </VirtualHost>" >> /etc/apache2/sites-available/dvwa.conf
 
 
-echo "Installing mysql and mysql-server"
+echo "Installing mysql-client and mysql-server"
 apt-get install mysql mysql-server -y
 systemctl start mysql
 
@@ -37,8 +37,8 @@ flush privileges; | mysql -u root -p$rootpass
 echo "Installing Damn Vulnerable Web App (DVWA)"
 cd /var/www/html
 wget https://codeload.github.com/ethicalhack3r/DVWA/zip/master
-unzip master.zip
-rm -f DVWA-master.zip
+unzip master
+rm -rf DVWA-master
 mkdir /var/www/html/dvwa
 mv DVWA-master/* /var/www/html/dvwa/
 rm -rf DVWA-master/

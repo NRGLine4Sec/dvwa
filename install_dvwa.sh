@@ -28,6 +28,7 @@ echo "Installing mysql-client and mysql-server"
 apt-get install mysql-client mysql-server -y
 systemctl start mysql
 
+read -p "Enter your MySQL root password: " rootpass
 CREATE DATABASE dvwa; | mysql -u root -p$rootpass
 CREATE USER 'dvwauser'@'localhost' IDENTIFIED BY 'password'; | mysql -u root -p$rootpass
 GRANT ALL ON dvwa.* TO 'dvwauser'@'localhost'; | mysql -u root -p$rootpass

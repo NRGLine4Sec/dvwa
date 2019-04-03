@@ -28,12 +28,6 @@ echo "Installing mysql-client and mysql-server"
 apt-get install mysql-client mysql-server -y
 systemctl start mysql
 
-
-#CREATE DATABASE dvwa; | mysql -u root -p$rootpass
-#CREATE USER 'dvwauser'@'localhost' IDENTIFIED BY 'password'; | mysql -u root -p$rootpass
-#GRANT ALL ON dvwa.* TO 'dvwauser'@'localhost'; | mysql -u root -p$rootpass
-#flush privileges; | mysql -u root -p$rootpass
-
 read -p "Enter your MySQL root password: " rootpass
 read -p "Database name: " dbname
 read -p "Database username: " dbuser
@@ -63,7 +57,7 @@ sed -i 's/allow_url_fopen = Off/"allow_url_fopen = On/' /etc/php/7.0/apache2/php
 systemctl restart apache2
 
 echo "Installation is done"
-echo "Open your web browser and go to http://$IP_ADDR/dvwa/setup.php to continue to configure"
+echo "Open your web browser and go to http://$IP_ADDR/setup.php to continue to configure"
 echo "1. Click on Create / Reset Database"
 echo "2. Login to DVWA with the user credentials below"
 echo "Username: admin"
